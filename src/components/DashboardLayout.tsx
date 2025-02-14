@@ -9,7 +9,9 @@ import {
   FileText,
   Settings,
   Menu,
-  X
+  X,
+  ArrowLeft,
+  Bell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -71,6 +73,43 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         "transition-all duration-300 ease-in-out",
         "lg:ml-64 min-h-screen"
       )}>
+        {/* Header Bar */}
+        <header className="bg-white border-b sticky top-0 z-30">
+          <div className="flex items-center justify-between px-8 py-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Go back"
+              >
+                <ArrowLeft className="h-5 w-5 text-gray-600" />
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Home
+              </button>
+            </div>
+            <div className="flex items-center gap-4">
+              <button
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors relative"
+                aria-label="Notifications"
+              >
+                <Bell className="h-5 w-5 text-gray-600" />
+                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </button>
+              <button
+                onClick={() => navigate("/settings")}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Settings"
+              >
+                <Settings className="h-5 w-5 text-gray-600" />
+              </button>
+            </div>
+          </div>
+        </header>
+        
         <div className="p-8">
           {children}
         </div>
