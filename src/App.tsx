@@ -10,6 +10,8 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import CareerRoadmap from "./pages/CareerRoadmap";
 import Mentorship from "./pages/Mentorship";
+import MentorList from "./pages/MentorList";
+import MentorProfile from "./pages/MentorProfile";
 import JobPortal from "./pages/JobPortal";
 import Resources from "./pages/Resources";
 import About from "./pages/About";
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/career-roadmap" element={<CareerRoadmap />} />
           <Route path="/mentorship" element={<Mentorship />} />
+          <Route path="/mentors" element={<MentorList />} />
+          <Route path="/mentors/:id" element={<MentorProfile />} />
           <Route path="/job-portal" element={<JobPortal />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/about" element={<About />} />
