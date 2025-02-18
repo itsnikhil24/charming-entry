@@ -14,6 +14,7 @@ import MentorList from "./pages/MentorList";
 import MentorProfile from "./pages/MentorProfile";
 import JobPortal from "./pages/JobPortal";
 import Resources from "./pages/Resources";
+import Settings from "./pages/Settings";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/mentors/:id" element={<MentorProfile />} />
           <Route path="/job-portal" element={<JobPortal />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
