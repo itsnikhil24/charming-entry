@@ -77,7 +77,7 @@ const Settings = () => {
         </Card>
 
         <div className="border-t pt-6">
-          <Button variant="destructive" className="w-full sm:w-auto">
+          <Button variant="destructive" className="w-full sm:w-auto" onClick={() => navigate("/")>
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>
