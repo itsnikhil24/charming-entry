@@ -29,7 +29,7 @@ const CareerRoadmap = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Overall Completion</span>
-                  <span>74/455 (16%)</span>
+                  <span>5/5 (100%)</span>
                 </div>
                 <Progress value={16} className="h-2" />
               </div>
