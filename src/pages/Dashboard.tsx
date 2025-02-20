@@ -8,6 +8,11 @@ import { ArrowRight } from "lucide-react";
 const Dashboard = () => {
   const navigate = useNavigate();
 
+  // Calculate progress based on completed topics
+  const totalTopics = 455; // Total number of topics
+  const completedTopics = 74; // Number of completed topics
+  const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -26,9 +31,9 @@ const Dashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Roadmap Progress</span>
-                <span className="text-sm font-medium">16%</span>
+                <span className="text-sm font-medium">{completedTopics}/{totalTopics} ({progressPercentage}%)</span>
               </div>
-              <Progress value={50} className="h-2" />
+              <Progress value={progressPercentage} className="h-2" />
             </div>
             <Button className="w-full sm:w-auto" onClick={() => navigate("/career-roadmap")}>
               Update Your Path <ArrowRight className="ml-2 h-4 w-4" />

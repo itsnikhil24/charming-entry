@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -101,12 +100,16 @@ const TopicProgress = () => {
     );
   };
 
+  const totalTopics = 455; // Total topics across all sections
+  const completedTopics = 74; // Completed topics across all sections
+
   return (
     <div className="space-y-8">
       <div className="bg-gray-900 p-6 rounded-lg">
         <div className="flex justify-between items-center text-gray-300 mb-4">
           <div>
-            Your Progress: {completedItems}/{totalItems}</div>
+            Your Progress: {completedItems}/{totalItems}
+          </div>
           <div>{Math.round(progressPercentage)}% complete</div>
         </div>
         <Progress value={progressPercentage} className="h-2 bg-gray-700" />

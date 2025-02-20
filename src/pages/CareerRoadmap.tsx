@@ -9,6 +9,11 @@ import { ArrowRight } from "lucide-react";
 const CareerRoadmap = () => {
   const [showProgress, setShowProgress] = useState(false);
 
+  // Calculate progress based on completed topics
+  const totalTopics = 455; // Total number of topics
+  const completedTopics = 74; // Number of completed topics
+  const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
   return (
     <DashboardLayout>
       {!showProgress ? (
@@ -29,9 +34,9 @@ const CareerRoadmap = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Overall Completion</span>
-                  <span>5/5 (100%)</span>
+                  <span>{completedTopics}/{totalTopics} ({progressPercentage}%)</span>
                 </div>
-                <Progress value={100} className="h-2" />
+                <Progress value={progressPercentage} className="h-2" />
               </div>
             </div>
           </div>
