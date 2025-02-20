@@ -5,8 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, User, Mail, Book } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto space-y-8">
@@ -54,30 +61,30 @@ const Settings = () => {
               <div>
                 <div className="flex justify-between text-sm mb-2">
                   <span>Frontend Development</span>
-                  <span>75%</span>
+                  <span>50%</span>
                 </div>
-                <Progress value={75} className="h-2" />
+                <Progress value={50} className="h-2" />
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-2">
                   <span>Backend Development</span>
-                  <span>45%</span>
+                  <span>50%</span>
                 </div>
-                <Progress value={45} className="h-2" />
+                <Progress value={50} className="h-2" />
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-2">
                   <span>System Design</span>
-                  <span>60%</span>
+                  <span>50%</span>
                 </div>
-                <Progress value={60} className="h-2" />
+                <Progress value={50} className="h-2" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         <div className="border-t pt-6">
-          <Button variant="destructive" className="w-full sm:w-auto">
+          <Button variant="destructive" className="w-full sm:w-auto" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>

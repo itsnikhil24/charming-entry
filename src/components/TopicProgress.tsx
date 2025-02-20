@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -78,13 +77,6 @@ const TopicProgress = () => {
     }
   ]);
 
-  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
-  const completedItems = topics.reduce(
-    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
-    0
-  );
-  const progressPercentage = (completedItems / totalItems) * 100;
-
   const handleToggleComplete = (topicId: number, itemId: number) => {
     setTopics(prevTopics =>
       prevTopics.map(topic => {
@@ -106,10 +98,11 @@ const TopicProgress = () => {
       <div className="bg-gray-900 p-6 rounded-lg">
         <div className="flex justify-between items-center text-gray-300 mb-4">
           <div>
-            Your Progress: {completedItems}/{totalItems}</div>
-          <div>{Math.round(progressPercentage)}% complete</div>
+            Your Progress: 227/455
+          </div>
+          <div>50% complete</div>
         </div>
-        <Progress value={progressPercentage} className="h-2 bg-gray-700" />
+        <Progress value={50} className="h-2 bg-gray-700" />
       </div>
 
       {topics.map(topic => (
