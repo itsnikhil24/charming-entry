@@ -26,7 +26,7 @@ const Dashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Roadmap Progress</span>
-                <span className="text-sm font-medium">50%</span>
+                <span className="text-sm font-medium">16%</span>
               </div>
               <Progress value={50} className="h-2" />
             </div>
