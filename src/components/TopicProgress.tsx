@@ -5,7 +5,21 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ArrowUp, Youtube, FileText, Code, BookOpen } from "lucide-react";
-import { Topic, getProgress } from "@/types/topic";
+
+interface Topic {
+  id: number;
+  title: string;
+  items: {
+    id: number;
+    name: string;
+    completed: boolean;
+    article?: boolean;
+    youtube?: boolean;
+    practice?: boolean;
+    notes?: boolean;
+    difficulty: "Easy" | "Medium" | "Hard";
+  }[];
+}
 
 const TopicProgress = () => {
   const [topics, setTopics] = useState<Topic[]>([
@@ -64,6 +78,13 @@ const TopicProgress = () => {
     }
   ]);
 
+  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
+  const completedItems = topics.reduce(
+    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
+    0
+  );
+  const progressPercentage = (completedItems / totalItems) * 100;
+
   const handleToggleComplete = (topicId: number, itemId: number) => {
     setTopics(prevTopics =>
       prevTopics.map(topic => {
@@ -80,16 +101,13 @@ const TopicProgress = () => {
     );
   };
 
-  const { completedItems, totalItems, progressPercentage } = getProgress(topics);
-
   return (
     <div className="space-y-8">
       <div className="bg-gray-900 p-6 rounded-lg">
         <div className="flex justify-between items-center text-gray-300 mb-4">
           <div>
-            Your Progress: {completedItems}/{totalItems}
-          </div>
-          <div>{progressPercentage}% complete</div>
+            Your Progress: {completedItems}/{totalItems}</div>
+          <div>{Math.round(progressPercentage)}% complete</div>
         </div>
         <Progress value={progressPercentage} className="h-2 bg-gray-700" />
       </div>

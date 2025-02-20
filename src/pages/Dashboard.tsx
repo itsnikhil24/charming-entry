@@ -4,31 +4,9 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight } from "lucide-react";
-import { Topic, getProgress } from "@/types/topic";
-
-const INITIAL_TOPICS: Topic[] = [
-  {
-    id: 1,
-    title: "Step 1: Learn the basics",
-    items: [
-      {
-        id: 1,
-        name: "User Input / Output",
-        completed: true,
-        article: true,
-        youtube: true,
-        practice: true,
-        notes: true,
-        difficulty: "Easy"
-      }
-    ]
-  }
-];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  
-  const { completedItems, totalItems, progressPercentage } = getProgress(INITIAL_TOPICS);
 
   return (
     <DashboardLayout>
@@ -48,9 +26,9 @@ const Dashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Roadmap Progress</span>
-                <span className="text-sm font-medium">{completedItems}/{totalItems} ({progressPercentage}%)</span>
+                <span className="text-sm font-medium">50%</span>
               </div>
-              <Progress value={progressPercentage} className="h-2" />
+              <Progress value={50} className="h-2" />
             </div>
             <Button className="w-full sm:w-auto" onClick={() => navigate("/career-roadmap")}>
               Update Your Path <ArrowRight className="ml-2 h-4 w-4" />
