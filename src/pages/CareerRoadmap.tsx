@@ -31,7 +31,7 @@ const CareerRoadmap = () => {
                   <span>Overall Completion</span>
                   <span>5/5 (100%)</span>
                 </div>
-                <Progress value={16} className="h-2" />
+                <Progress value={100} className="h-2" />
               </div>
             </div>
           </div>
