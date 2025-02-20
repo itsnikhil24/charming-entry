@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -6,13 +5,36 @@ import { Progress } from "@/components/ui/progress";
 import TopicProgress from "@/components/TopicProgress";
 import { ArrowRight } from "lucide-react";
 
+const INITIAL_TOPICS = [
+  {
+    id: 1,
+    title: "Step 1: Learn the basics",
+    items: [
+      {
+        id: 1,
+        name: "User Input / Output",
+        completed: true,
+        article: true,
+        youtube: true,
+        practice: true,
+        notes: true,
+        difficulty: "Easy"
+      },
+      // ... other items
+    ]
+  }
+];
+
 const CareerRoadmap = () => {
   const [showProgress, setShowProgress] = useState(false);
-
-  // Calculate progress based on completed topics
-  const totalTopics = 455; // Total number of topics
-  const completedTopics = 74; // Number of completed topics
-  const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+  
+  // Calculate initial progress
+  const completedItems = INITIAL_TOPICS.reduce(
+    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
+    0
+  );
+  const totalItems = INITIAL_TOPICS.reduce((acc, topic) => acc + topic.items.length, 0);
+  const progressPercentage = Math.round((completedItems / totalItems) * 100);
 
   return (
     <DashboardLayout>
@@ -34,7 +56,7 @@ const CareerRoadmap = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Overall Completion</span>
-                  <span>{completedTopics}/{totalTopics} ({progressPercentage}%)</span>
+                  <span>{completedItems}/{totalItems} ({progressPercentage}%)</span>
                 </div>
                 <Progress value={progressPercentage} className="h-2" />
               </div>

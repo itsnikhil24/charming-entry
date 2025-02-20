@@ -1,17 +1,34 @@
-
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight } from "lucide-react";
+import { getProgress } from "@/components/TopicProgress";
+
+const INITIAL_TOPICS = [
+  {
+    id: 1,
+    title: "Step 1: Learn the basics",
+    items: [
+      {
+        id: 1,
+        name: "User Input / Output",
+        completed: true,
+        article: true,
+        youtube: true,
+        practice: true,
+        notes: true,
+        difficulty: "Easy"
+      },
+      // ... other items
+    ]
+  }
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  // Calculate progress based on completed topics
-  const totalTopics = 455; // Total number of topics
-  const completedTopics = 74; // Number of completed topics
-  const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+  
+  const { completedItems, totalItems, progressPercentage } = getProgress(INITIAL_TOPICS);
 
   return (
     <DashboardLayout>
@@ -31,7 +48,7 @@ const Dashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Roadmap Progress</span>
-                <span className="text-sm font-medium">{completedTopics}/{totalTopics} ({progressPercentage}%)</span>
+                <span className="text-sm font-medium">{completedItems}/{totalItems} ({progressPercentage}%)</span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
             </div>

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -19,6 +20,22 @@ interface Topic {
     difficulty: "Easy" | "Medium" | "Hard";
   }[];
 }
+
+// This helper function calculates the total topics and completed topics
+export const getProgress = (topics: Topic[]) => {
+  const completedItems = topics.reduce(
+    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
+    0
+  );
+  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
+  const progressPercentage = Math.round((completedItems / totalItems) * 100);
+
+  return {
+    completedItems,
+    totalItems,
+    progressPercentage
+  };
+};
 
 const TopicProgress = () => {
   const [topics, setTopics] = useState<Topic[]>([
@@ -77,13 +94,6 @@ const TopicProgress = () => {
     }
   ]);
 
-  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
-  const completedItems = topics.reduce(
-    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
-    0
-  );
-  const progressPercentage = (completedItems / totalItems) * 100;
-
   const handleToggleComplete = (topicId: number, itemId: number) => {
     setTopics(prevTopics =>
       prevTopics.map(topic => {
@@ -100,8 +110,7 @@ const TopicProgress = () => {
     );
   };
 
-  const totalTopics = 455; // Total topics across all sections
-  const completedTopics = 74; // Completed topics across all sections
+  const { completedItems, totalItems, progressPercentage } = getProgress(topics);
 
   return (
     <div className="space-y-8">
@@ -110,7 +119,7 @@ const TopicProgress = () => {
           <div>
             Your Progress: {completedItems}/{totalItems}
           </div>
-          <div>{Math.round(progressPercentage)}% complete</div>
+          <div>{progressPercentage}% complete</div>
         </div>
         <Progress value={progressPercentage} className="h-2 bg-gray-700" />
       </div>
@@ -184,4 +193,5 @@ const TopicProgress = () => {
   );
 };
 
+export { getProgress };
 export default TopicProgress;
