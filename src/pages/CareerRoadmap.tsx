@@ -1,11 +1,13 @@
+
 import { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import TopicProgress from "@/components/TopicProgress";
 import { ArrowRight } from "lucide-react";
+import { Topic, getProgress } from "@/types/topic";
 
-const INITIAL_TOPICS = [
+const INITIAL_TOPICS: Topic[] = [
   {
     id: 1,
     title: "Step 1: Learn the basics",
@@ -19,8 +21,7 @@ const INITIAL_TOPICS = [
         practice: true,
         notes: true,
         difficulty: "Easy"
-      },
-      // ... other items
+      }
     ]
   }
 ];
@@ -28,13 +29,7 @@ const INITIAL_TOPICS = [
 const CareerRoadmap = () => {
   const [showProgress, setShowProgress] = useState(false);
   
-  // Calculate initial progress
-  const completedItems = INITIAL_TOPICS.reduce(
-    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
-    0
-  );
-  const totalItems = INITIAL_TOPICS.reduce((acc, topic) => acc + topic.items.length, 0);
-  const progressPercentage = Math.round((completedItems / totalItems) * 100);
+  const { completedItems, totalItems, progressPercentage } = getProgress(INITIAL_TOPICS);
 
   return (
     <DashboardLayout>

@@ -5,37 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ArrowUp, Youtube, FileText, Code, BookOpen } from "lucide-react";
-
-interface Topic {
-  id: number;
-  title: string;
-  items: {
-    id: number;
-    name: string;
-    completed: boolean;
-    article?: boolean;
-    youtube?: boolean;
-    practice?: boolean;
-    notes?: boolean;
-    difficulty: "Easy" | "Medium" | "Hard";
-  }[];
-}
-
-// This helper function calculates the total topics and completed topics
-export const getProgress = (topics: Topic[]) => {
-  const completedItems = topics.reduce(
-    (acc, topic) => acc + topic.items.filter(item => item.completed).length,
-    0
-  );
-  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
-  const progressPercentage = Math.round((completedItems / totalItems) * 100);
-
-  return {
-    completedItems,
-    totalItems,
-    progressPercentage
-  };
-};
+import { Topic, getProgress } from "@/types/topic";
 
 const TopicProgress = () => {
   const [topics, setTopics] = useState<Topic[]>([
@@ -193,5 +163,4 @@ const TopicProgress = () => {
   );
 };
 
-export { getProgress };
 export default TopicProgress;

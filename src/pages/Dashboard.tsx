@@ -1,11 +1,12 @@
+
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight } from "lucide-react";
-import { getProgress } from "@/components/TopicProgress";
+import { Topic, getProgress } from "@/types/topic";
 
-const INITIAL_TOPICS = [
+const INITIAL_TOPICS: Topic[] = [
   {
     id: 1,
     title: "Step 1: Learn the basics",
@@ -19,8 +20,7 @@ const INITIAL_TOPICS = [
         practice: true,
         notes: true,
         difficulty: "Easy"
-      },
-      // ... other items
+      }
     ]
   }
 ];
