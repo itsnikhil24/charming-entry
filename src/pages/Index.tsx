@@ -17,6 +17,7 @@ const Index = () => {
               <span className="ml-2 text-xl font-semibold">CareerPath</span>
             </div>
             <div className="hidden md:flex items-center space-x-4">
+              <Button onClick={() => navigate("/dashboard")} variant="ghost">Dashboard</Button>
               <Button onClick={() => navigate("/career-roadmap")} variant="ghost">Career Roadmap</Button>
               <Button onClick={() => navigate("/mentorship")} variant="ghost">Mentorship</Button>
               <Button onClick={() => navigate("/job-portal")} variant="ghost">Job Portal</Button>
