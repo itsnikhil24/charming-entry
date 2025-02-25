@@ -5,14 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, User, Mail, Book } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Settings = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    navigate("/");
-  };
+  const { signOut, user } = useAuth();
 
   return (
     <DashboardLayout>
@@ -26,11 +22,11 @@ const Settings = () => {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6">
               <Avatar className="h-24 w-24">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarImage src={user?.user_metadata?.avatar_url || "https://github.com/shadcn.png"} />
+                <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div>
-                <h2 className="text-2xl font-semibold">John Doe</h2>
+                <h2 className="text-2xl font-semibold">{user?.user_metadata?.full_name || "User"}</h2>
                 <p className="text-gray-600">Frontend Developer</p>
               </div>
             </div>
@@ -38,15 +34,15 @@ const Settings = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <User className="h-5 w-5 text-gray-500" />
-                <span>@johndoe</span>
+                <span>{user?.user_metadata?.username || user?.email}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-5 w-5 text-gray-500" />
-                <span>john.doe@example.com</span>
+                <span>{user?.email}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Book className="h-5 w-5 text-gray-500" />
-                <span>Joined January 2024</span>
+                <span>Joined {new Date(user?.created_at).toLocaleDateString()}</span>
               </div>
             </div>
           </CardContent>
@@ -84,7 +80,7 @@ const Settings = () => {
         </Card>
 
         <div className="border-t pt-6">
-          <Button variant="destructive" className="w-full sm:w-auto" onClick={handleLogout}>
+          <Button variant="destructive" className="w-full sm:w-auto" onClick={signOut}>
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>
