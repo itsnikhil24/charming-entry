@@ -1,9 +1,13 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ArrowUp, Youtube, FileText, Code, BookOpen } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 interface Topic {
   id: number;
@@ -21,6 +25,7 @@ interface Topic {
 }
 
 const TopicProgress = () => {
+  const { user } = useAuth();
   const [topics, setTopics] = useState<Topic[]>([
     {
       id: 1,
@@ -29,7 +34,7 @@ const TopicProgress = () => {
         {
           id: 1,
           name: "User Input / Output",
-          completed: true,
+          completed: false,
           article: true,
           youtube: true,
           practice: true,
@@ -39,7 +44,7 @@ const TopicProgress = () => {
         {
           id: 2,
           name: "Data Types",
-          completed: true,
+          completed: false,
           youtube: true,
           practice: true,
           notes: true,
@@ -48,7 +53,7 @@ const TopicProgress = () => {
         {
           id: 3,
           name: "If Else statements",
-          completed: true,
+          completed: false,
           article: true,
           youtube: true,
           practice: true,
@@ -58,7 +63,7 @@ const TopicProgress = () => {
         {
           id: 4,
           name: "Switch Statement",
-          completed: true,
+          completed: false,
           article: true,
           youtube: true,
           practice: true,
@@ -68,7 +73,7 @@ const TopicProgress = () => {
         {
           id: 5,
           name: "What are arrays & strings?",
-          completed: true,
+          completed: false,
           youtube: true,
           notes: true,
           difficulty: "Easy"
@@ -77,20 +82,95 @@ const TopicProgress = () => {
     }
   ]);
 
-  const handleToggleComplete = (topicId: number, itemId: number) => {
-    setTopics(prevTopics =>
-      prevTopics.map(topic => {
+  const [totalCompleted, setTotalCompleted] = useState(0);
+  const totalItems = topics.reduce((acc, topic) => acc + topic.items.length, 0);
+  const completionPercentage = Math.round((totalCompleted / totalItems) * 100);
+
+  useEffect(() => {
+    if (user) {
+      loadUserProgress();
+    }
+  }, [user]);
+
+  const loadUserProgress = async () => {
+    try {
+      const { data: progressData, error } = await supabase
+        .from('user_progress')
+        .select('topic_id, item_id, completed')
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      // Update topics with saved progress
+      const updatedTopics = topics.map(topic => ({
+        ...topic,
+        items: topic.items.map(item => ({
+          ...item,
+          completed: progressData?.some(
+            progress => progress.topic_id === topic.id && 
+                       progress.item_id === item.id && 
+                       progress.completed
+          ) || false
+        }))
+      }));
+
+      setTopics(updatedTopics);
+      
+      // Update total completed count
+      const completed = progressData?.filter(p => p.completed)?.length || 0;
+      setTotalCompleted(completed);
+    } catch (error: any) {
+      toast.error("Failed to load progress");
+      console.error("Error loading progress:", error.message);
+    }
+  };
+
+  const handleToggleComplete = async (topicId: number, itemId: number) => {
+    if (!user) {
+      toast.error("Please login to track progress");
+      return;
+    }
+
+    try {
+      const updatedTopics = topics.map(topic => {
         if (topic.id === topicId) {
           return {
             ...topic,
-            items: topic.items.map(item =>
-              item.id === itemId ? { ...item, completed: !item.completed } : item
-            )
+            items: topic.items.map(item => {
+              if (item.id === itemId) {
+                return { ...item, completed: !item.completed };
+              }
+              return item;
+            })
           };
         }
         return topic;
-      })
-    );
+      });
+
+      const isCompleted = !topics
+        .find(t => t.id === topicId)
+        ?.items.find(i => i.id === itemId)?.completed;
+
+      // Update database
+      const { error } = await supabase
+        .from('user_progress')
+        .upsert({
+          user_id: user.id,
+          topic_id: topicId,
+          item_id: itemId,
+          completed: isCompleted,
+          completed_at: isCompleted ? new Date().toISOString() : null
+        });
+
+      if (error) throw error;
+
+      setTopics(updatedTopics);
+      setTotalCompleted(prev => isCompleted ? prev + 1 : prev - 1);
+      toast.success(isCompleted ? "Progress saved!" : "Progress updated!");
+    } catch (error: any) {
+      toast.error("Failed to update progress");
+      console.error("Error updating progress:", error.message);
+    }
   };
 
   return (
@@ -98,11 +178,11 @@ const TopicProgress = () => {
       <div className="bg-gray-900 p-6 rounded-lg">
         <div className="flex justify-between items-center text-gray-300 mb-4">
           <div>
-            Your Progress: 227/455
+            Your Progress: {totalCompleted}/{totalItems}
           </div>
-          <div>50% complete</div>
+          <div>{completionPercentage}% complete</div>
         </div>
-        <Progress value={50} className="h-2 bg-gray-700" />
+        <Progress value={completionPercentage} className="h-2 bg-gray-700" />
       </div>
 
       {topics.map(topic => (
