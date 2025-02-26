@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -101,7 +100,6 @@ const TopicProgress = () => {
 
       if (error) throw error;
 
-      // Update topics with saved progress
       const updatedTopics = topics.map(topic => ({
         ...topic,
         items: topic.items.map(item => ({
@@ -115,8 +113,6 @@ const TopicProgress = () => {
       }));
 
       setTopics(updatedTopics);
-      
-      // Update total completed count
       const completed = progressData?.filter(p => p.completed)?.length || 0;
       setTotalCompleted(completed);
     } catch (error: any) {
@@ -151,16 +147,42 @@ const TopicProgress = () => {
         .find(t => t.id === topicId)
         ?.items.find(i => i.id === itemId)?.completed;
 
-      // Update database
-      const { error } = await supabase
+      const { data: existingData } = await supabase
         .from('user_progress')
-        .upsert({
+        .select()
+        .match({
           user_id: user.id,
           topic_id: topicId,
-          item_id: itemId,
-          completed: isCompleted,
-          completed_at: isCompleted ? new Date().toISOString() : null
+          item_id: itemId
         });
+
+      let error;
+
+      if (existingData && existingData.length > 0) {
+        const { error: updateError } = await supabase
+          .from('user_progress')
+          .update({
+            completed: isCompleted,
+            completed_at: isCompleted ? new Date().toISOString() : null
+          })
+          .match({
+            user_id: user.id,
+            topic_id: topicId,
+            item_id: itemId
+          });
+        error = updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('user_progress')
+          .insert({
+            user_id: user.id,
+            topic_id: topicId,
+            item_id: itemId,
+            completed: isCompleted,
+            completed_at: isCompleted ? new Date().toISOString() : null
+          });
+        error = insertError;
+      }
 
       if (error) throw error;
 
