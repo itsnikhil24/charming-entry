@@ -1,12 +1,49 @@
 
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [progress, setProgress] = useState({
+    completed: 0,
+    total: 5, // Initial total based on our current topics
+    percentage: 0
+  });
+
+  useEffect(() => {
+    if (user) {
+      loadProgress();
+    }
+  }, [user]);
+
+  const loadProgress = async () => {
+    try {
+      const { data: progressData, error } = await supabase
+        .from('user_progress')
+        .select('completed')
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      const completed = progressData?.filter(p => p.completed)?.length || 0;
+      const total = 5; // Total items from our current topic list
+      
+      setProgress({
+        completed,
+        total,
+        percentage: Math.round((completed / total) * 100)
+      });
+    } catch (error) {
+      console.error("Error loading progress:", error);
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -26,9 +63,11 @@ const Dashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Roadmap Progress</span>
-                <span className="text-sm font-medium">50%</span>
+                <span className="text-sm font-medium">
+                  {progress.completed}/{progress.total} ({progress.percentage}%)
+                </span>
               </div>
-              <Progress value={50} className="h-2" />
+              <Progress value={progress.percentage} className="h-2" />
             </div>
             <Button className="w-full sm:w-auto" onClick={() => navigate("/career-roadmap")}>
               Update Your Path <ArrowRight className="ml-2 h-4 w-4" />

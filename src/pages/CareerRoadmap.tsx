@@ -12,7 +12,7 @@ const CareerRoadmap = () => {
   const [showProgress, setShowProgress] = useState(false);
   const [completionStats, setCompletionStats] = useState({
     completed: 0,
-    total: 0,
+    total: 5, // Total items from our current topic list
     percentage: 0
   });
   const { user } = useAuth();
@@ -33,7 +33,7 @@ const CareerRoadmap = () => {
       if (error) throw error;
 
       const completed = progressData?.filter(p => p.completed)?.length || 0;
-      const total = 455; // Total number of items in the roadmap
+      const total = 5; // Total items from our current topic list
 
       setCompletionStats({
         completed,
